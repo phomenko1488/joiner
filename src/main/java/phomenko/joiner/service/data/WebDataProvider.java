@@ -39,7 +39,6 @@ public class WebDataProvider implements DataProvider {
                 content.append(inputLine);
             }
             in.close();
-            System.out.println(content.toString());
             List<InputItem> res = new ArrayList<>();
             new JSONArray(content.toString()).forEach(json -> {
                 JSONObject j = (JSONObject) json;

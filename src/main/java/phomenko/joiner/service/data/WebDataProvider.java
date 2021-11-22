@@ -1,11 +1,15 @@
 package phomenko.joiner.service.data;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import phomenko.joiner.domain.InputItem;
 import phomenko.joiner.service.parser.Parser;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -26,10 +30,26 @@ public class WebDataProvider implements DataProvider {
         try {
             url = new URL(input);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            String content = (String) connection.getContent();
-            System.out.println(content);
+            connection.setRequestMethod("GET");
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(connection.getInputStream()));
+            String inputLine;
+            StringBuffer content = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                content.append(inputLine);
+            }
+            in.close();
+            System.out.println(content.toString());
             List<InputItem> res = new ArrayList<>();
-            new JSONArray(content).forEach(o -> res.add((InputItem) o));
+            new JSONArray(content.toString()).forEach(json -> {
+                JSONObject j = (JSONObject) json;
+                try {
+                    res.add(parser.parse(j.toString()));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+
+            });
             return res;
         } catch (IOException e) {
             e.printStackTrace();

@@ -15,7 +15,7 @@ import phomenko.joiner.service.parser.Parser;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/read")
+@RequestMapping(value = "/api/v1/read")
 public class ArgumentsController {
     private final Parser parser;
     private final ControllerService controllerService;
@@ -25,6 +25,7 @@ public class ArgumentsController {
         this.parser = parser;
         this.controllerService = controllerService;
     }
+
     @PostMapping
     public ResponseEntity<?> getResponse(@RequestBody Request request) {
         ArgumentsReader reader = new ControllerArgumentsReader(request.getFirst(), request.getSecond());

@@ -1,0 +1,2 @@
+https://sciforce.solutions/downloads/sciforce-java-test1.json
+https://sciforce.solutions/downloads/sciforce-java-test2.json
